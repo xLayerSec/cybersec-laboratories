@@ -1,4 +1,4 @@
-# 🚗 crAPI Security Audit & Vulnerability Report
+# crAPI Security Audit & Vulnerability Report
 
 Este repositorio documenta una auditoría de seguridad realizada sobre **crAPI (Completely Ridiculous API)**, una aplicación web intencionalmente vulnerable basada en el **OWASP API Top 10**, diseñada para la práctica de pruebas de penetración en APIs.
 
