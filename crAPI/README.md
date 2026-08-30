@@ -51,7 +51,7 @@ La evaluación se realizó bajo un enfoque de caja negra (*black-box*):
 
 **Descripción:** El endpoint encargado de recuperar los detalles de una orden carece de validación de propiedad, permitiendo a cualquier usuario autenticado consultar transacciones ajenas mediante la alteración secuencial de identificadores.
 
-* **Endpoint Vulnerable:** `GET /shop/api/v2/order/{{order_id}}`
+* **Endpoint Vulnerable:** `GET /shop/api/v2/order/order_id`
 * **Severidad:** Crítica
 
 #### Pasos de Explotación:
@@ -103,7 +103,7 @@ Aplicar esquemas estrictos de validación de tipos de datos en la entrada del us
 
 #### Paso 1: Extracción Masiva de Registros y VINs
 * **Endpoint Vulnerable:** `GET /crAPI/api/v2/service-report?id={{report_id}}`
-* La enumeración secuencial de reportes expone notas de taller y VINs, volviendo innecesario un escaneo individual posterior por vehículo para obtener datos generales.
+* La enumeración secuencial de reportes expone notas de taller y VINs.
 
 #### Paso 2: Auditoría del Estado Transaccional en el Dashboard
 * **Endpoint Objetivo:** `GET /vehicle-service-dashboard?VIN={{vin_ajeno}}`
