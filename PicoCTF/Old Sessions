@@ -1,0 +1,160 @@
+# INFORME DE AUDITORÍA DE SEGURIDAD // Old Sessions
+**SCOPE:** picoCTF
+**TIMESTAMP:** 2026-10-13 19:32:54
+
+---
+
+## FASE: OSINT
+
+### ASSET / TARGET: Principal
+
+#### Decripcion del reto
+* **Fecha:** 2026-10-13 19:08:30
+* **Evidencia / Output:**
+```text
+Contar con controles adecuados para el tiempo de espera de la sesión es fundamental para proteger las cuentas de usuario. Si un usuario inicia sesión en un equipo público o compartido pero no cierra la sesión explícitamente (limitándose a cerrar la pestaña del navegador) y los parámetros de expiración de la sesión están mal configurados, esta podría permanecer activa indefinidamente.
+
+Esto permite que un atacante que utilice el mismo navegador posteriormente acceda a la cuenta del usuario sin necesidad de credenciales, aprovechando que la sesión nunca caduca y permanece autenticada. Un amigo te pide que pruebes una nueva plataforma de redes sociales que creó hace unos años. Aunque todavía está en desarrollo, comenta que el sitio está casi terminado. También menciona que detesta tener que iniciar sesión constantemente en los sitios web, por lo que ha diseñado su página de tal manera que, «una vez que inicias sesión, nunca más tienes que cerrarla».
+
+PISTAS:
+
+¿Sabes usar la inspectora web?
+
+¿Dónde se almacenan las cookies?
+```
+
+## FASE: Reconocimiento Activo
+
+### ASSET / TARGET: Principal
+
+#### CREACION DE USUARIOS
+* **Fecha:** 2026-10-13 19:10:38
+* **Evidencia / Output:**
+```text
+en el Endpoint /register  creamos nuestro usuario en este caso le llamamos user: root password: admin
+
+
+```
+
+#### Analisis de codigo fuente 
+* **Fecha:** 2026-10-13 19:12:29
+* **Evidencia / Output:**
+```text
+<!doctype html>
+<html>
+<head>
+  <title>The New Twitter</title>
+  <link rel="stylesheet" href="/static/index.css">
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Header box -->
+    <div class="header-box">
+      <div class="title-box">
+        <h1 id="page-title">Homepage</h1>
+      </div>
+      <hr>  <!-- light grey line -->
+
+      <div class="welcome-logout">
+        <h3 class="welcome-message">Welcome <em>root</em></h3>
+        <a href="/logout" class="logout-button">Logout</a>
+      </div>
+
+      
+    </div>
+
+    <!-- Comments box -->
+    <div class="comments-box">
+      <h3>Comments</h3>
+      <hr>
+      <!-- List of comment entries -->
+      <ul class="comment-list" id="commentList">
+
+        <!-- Example entry -->
+        <li class="comment">
+          <div class="comment-header">
+            <span class="username">billy_joe_134</span>
+            <span class="timestamp">2025-04-10 09:15</span>
+          </div>
+          <div class="comment-text">
+            This site is cool :D
+          </div>
+        </li>
+
+        <li class="comment">
+          <div class="comment-header">
+            <span class="username">mary_jones_8992</span>
+            <span class="timestamp">2024-2-20 14:50</span>
+          </div>
+          <div class="comment-text">
+            Hey I found a strange page at /sessions 
+          </div>
+        </li>
+
+        <li class="comment">
+          <div class="comment-header">
+            <span class="username">autin_1244</span>
+            <span class="timestamp">2023-07-05 18:30</span>
+          </div>
+          <div class="comment-text">
+            Hey everyone!!!
+          </div>
+        </li>
+
+        <li class="comment">
+          <div class="comment-header">
+            <span class="username">Admin</span>
+            <span class="timestamp">2023-01-02 07:45</span>
+          </div>
+          <div class="comment-text">
+            Hello world!
+          </div>
+        </li>
+
+      </ul>
+      
+    </div>
+  </div>
+</body>
+
+</html>
+```
+
+#### Endpoint Critico
+* **Fecha:** 2026-10-13 19:13:56
+* **Evidencia / Output:**
+```text
+<li class="comment">
+          <div class="comment-header">
+            <span class="username">mary_jones_8992</span>
+            <span class="timestamp">2024-2-20 14:50</span>
+          </div>
+          <div class="comment-text">
+            Hey I found a strange page at /sessions 
+          </div>
+        </li>
+
+
+{/sessions }
+```
+
+#### COOCKIES DE SESION
+* **Fecha:** 2026-10-13 19:15:52
+* **Evidencia / Output:**
+```text
+
+<p>1) session:SpSMyTYpEcR8t7r1AcW_lzH0lh4-MASb8Jxj4cbvWsc, {'_permanent': True, 'key': 'admin'}</p><p>2) session:eCiioYV6TTXhSt0grqAVa42regr5x72xiXFeaPlb7zE, {'_permanent': True, 'key': 'root'}</p>
+```
+
+#### SUPLATANCION DE COOCKIES DE SESION
+* **Fecha:** 2026-10-13 19:21:13
+* **Evidencia / Output:**
+```text
+EXTRAEMOS LA COOCKIE DE SESION DEL ADMIN YA QUE TENEMOS 2 SESIONES INICIADAS LA DE NOSTROS Y LA DEL 
+
+ADMINSpSMyTYpEcR8t7r1AcW_lzH0lh4-MASb8Jxj4cbvWsc
+
+NOS VAMOS A LA LA CONSOLA DE NUESTRO NAVEGADOR ctrl+shif+i UNA VEZ ABIERTA LA CONSOLA NOS VAMOS DIRECTO A APLICATION Y DE AHI A COCKIES ABRIMOS LA URL QUE NOS DA Y EN EL APARTADO VALUE ESTA LA COOCKIES ACTUAL DE NUESTRA SESION LA BORRAMOS Y PONEMOS LA DEL ADMIN Y RECARGAMOS CON F5 UNA VEZ RECARGANDO ESTAREMOS LOGEADOS EN LA SESION DEL ADMIN Y AHI ENCONTRAREMOS LA FLAG
+```
